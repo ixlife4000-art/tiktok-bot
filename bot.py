@@ -10,7 +10,7 @@ pending_links = {}
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("ارسل رابط تيك توك")
 
-async def handleasync def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
         return
         async def continue_download(update: Update, context: ContextTypes.DEFAULT_TYPE):

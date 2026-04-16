@@ -18,7 +18,8 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pending_links[user_id] = update.message.text.strip()
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("📢 زيارة الإعلان", url="https://t.me/tiktoknowatermarkbot")],
+    [ InlineKeyboardButton("📢 زيارة الإعلان", url="https://shrinkme.click/o5Jbre8")
+    
         [InlineKeyboardButton("✅ متابعة التحميل", callback_data="go")]
     ])
 

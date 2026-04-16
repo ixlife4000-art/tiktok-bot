@@ -10,7 +10,9 @@ pending_links = {}
 ad_clicked = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Send TikTok link")
+    await update.message.reply_text(
+        "Send a TikTok link to start downloading."
+    )
 
 async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
@@ -25,36 +27,51 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("✅ Continue Download", callback_data="go")]
     ])
 
-    await update.message.reply_text("Watch the ad first", reply_markup=keyboard)
+    await update.message.reply_text(
+        "Before downloading, follow these steps:\n\n"
+        "1. Tap 'Watch Ad'\n"
+        "2. Solve the captcha\n"
+        "3. Tap 'Continue' on the ad page\n"
+        "4. Come back to this bot\n"
+        "5. Tap 'Continue Download'\n\n"
+        "If you skip the ad steps, the download may not count.",
+        reply_markup=keyboard
+    )
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user_id = query.from_user.id
-
     await query.answer()
 
     if query.data == "ad":
         ad_clicked[user_id] = True
+        await query.message.reply_text(
+            "Open this ad link and complete the steps:\n"
+            "https://shrinkme.click/o5Jbre8\n\n"
+            "After that, come back here and tap 'Continue Download'."
+        )
+        return
 
-        # يفتح الرابط بعد الضغط
-        await query.message.reply_text("Open this link and complete it:\nhttps://shrinkme.click/o5Jbre8")
-
-    elif query.data == "go":
+    if query.data == "go":
         if not ad_clicked.get(user_id, False):
-            await query.message.reply_text("❌ You must watch the ad first")
+            await query.message.reply_text(
+                "❌ Please tap 'Watch Ad' first, complete the captcha and continue steps, then come back and tap 'Continue Download'."
+            )
             return
 
         url = pending_links.get(user_id)
         if not url:
-            await query.message.reply_text("Send link again")
+            await query.message.reply_text("❌ Send the TikTok link again.")
             return
 
-        await query.message.reply_text("Downloading...")
+        await query.message.reply_text("⏳ Downloading...")
 
         with tempfile.TemporaryDirectory() as tmp:
             ydl_opts = {
                 "outtmpl": f"{tmp}/%(title)s.%(ext)s",
                 "format": "mp4/best",
+                "quiet": True,
+                "noplaylist": True,
             }
 
             try:
@@ -65,8 +82,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 with open(file_path, "rb") as f:
                     await query.message.reply_video(video=f)
 
-            except:
-                await query.message.reply_text("Error")
+            except Exception:
+                await query.message.reply_text("❌ An error occurred while downloading.")
 
 def main():
     app = Application.builder().token(BOT_TOKEN).build()

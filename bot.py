@@ -4,7 +4,8 @@ from yt_dlp import YoutubeDL
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")pending_links = {}
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+pending_links = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("ارسل رابط تيك توك")

@@ -25,12 +25,14 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("📢 مشاهدة الإعلان", url="https://shrinkme.click/o5Jbre8")],
         [InlineKeyboardButton("✅ متابعة التحميل", callback_data="go")]
     ])
-
-    await update.message.reply_text(
-        "📢 لازم تشوف الإعلان قبل التحميل 👇",
-        reply_markup=keyboard
-    )
-
+await update.message.reply_text(
+"📢 لازم تكمل الإعلان 👇\n\n"
+"1- حل الكابتشا\n"
+"2- اضغط Continue\n"
+"3- ارجع واضغط متابعة التحميل",
+reply_markup=keyboard
+)
+    
 # بعد الضغط على متابعة
 async def continue_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
